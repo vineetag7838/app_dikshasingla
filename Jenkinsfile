@@ -4,7 +4,8 @@ pipeline {
 		registry = 'dikshasingla/inventory'
 		docker_port = 7100
 		username = 'dikshasingla'
-		container_exist = "${bat(script:'docker ps -q -f name=c-${username}-master', returnStdout: true).trim().readLines().drop(1).join("")}"
+		container_name ='c-${username}-master'
+		container_exist = "${bat(script:'docker ps -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
 	}
     stages {
         stage ('Clean workspace') {
