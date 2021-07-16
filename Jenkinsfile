@@ -4,7 +4,7 @@ pipeline {
 		registry = 'dikshasingla/inventory'
 		docker_port = 7100
 		username = 'dikshasingla'
-		container_exist = "${bat(script:'docker ps -q -f name=inventory', returnStdout: true).trim().readLines().drop(1).join("")}"
+		container_exist = "${bat(script:'docker ps -q -f name=c-${username}-master', returnStdout: true).trim().readLines().drop(1).join("")}"
 	}
     stages {
         stage ('Clean workspace') {
@@ -38,13 +38,13 @@ pipeline {
 			steps{
 				echo "Docker Image Step"
 				bat "mvn install"
-				bat "docker build -t i_${username}_master --no-cache -f Dockerfile ."
+				bat "docker build -t i-${username}-master --no-cache -f Dockerfile ."
 			}
 		}
 		stage('Move image to docker hub'){
 			steps{
 				echo "Move Image to docker hub"
-				bat "docker tag i_${username}_master ${registry}:${BUILD_NUMBER}"
+				bat "docker tag i-${username}-master ${registry}:${BUILD_NUMBER}"
 				withDockerRegistry([credentialsId: 'DockerHub',url:""]){
 				    bat "docker push ${registry}:${BUILD_NUMBER}"
 				}
@@ -53,13 +53,13 @@ pipeline {
 		stage('Docker Deployment'){
 			steps{
 			    script {
-                    echo "inventory container already exist with container id = ${env.container_exist}"
+                    echo "c-${username}-master container already exist with container id = ${env.container_exist}"
                     if (env.container_exist != null) {
-                        echo "Deleting existing inventory container"
-                        bat "docker stop inventory && docker rm inventory"
+                        echo "Deleting existing c-${username}-master container"
+                        bat "docker stop c-${username}-master && docker rm c-${username}-master"
                     }
                     echo "Docker Deployment"
-                    bat "docker run --name inventory -d -p 7100:3515 ${registry}:${BUILD_NUMBER}"
+                    bat "docker run --name c-${username}-master -d -p 7100:3515 ${registry}:${BUILD_NUMBER}"
                 }
             }
 		}
