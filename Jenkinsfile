@@ -22,7 +22,7 @@ pipeline {
             bat "mvn clean compile"
           }
         }
-        stage ('Test: Unit Test') {
+        stage ('test') {
           steps {
             bat "mvn test"
           }
@@ -36,29 +36,29 @@ pipeline {
         }
         stage('Docker image'){
 			steps{
-				echo "Docker Image Step"
+				echo "building docker image"
 				bat "mvn install"
 				bat "docker build -t i-${username}-master --no-cache -f Dockerfile ."
 			}
 		}
-		stage('Move image to docker hub'){
+		stage('move image to docker hub'){
 			steps{
-				echo "Move Image to docker hub"
+				echo "moving image to docker hub"
 				bat "docker tag i-${username}-master ${registry}:${BUILD_NUMBER}"
 				withDockerRegistry([credentialsId: 'DockerHub',url:""]){
 				    bat "docker push ${registry}:${BUILD_NUMBER}"
 				}
 			}
 		}
-		stage('Docker Deployment'){
+		stage('docker deployment'){
 			steps{
 			    script {
                     echo "c-${username}-master container already exist with container id = ${env.container_exist}"
                     if (env.container_exist != null) {
-                        echo "Deleting existing c-${username}-master container"
+                        echo "deleting existing c-${username}-master container"
                         bat "docker stop c-${username}-master && docker rm c-${username}-master"
                     }
-                    echo "Docker Deployment"
+                    echo "docker deployment"
                     bat "docker run --name c-${username}-master -d -p 7100:3515 ${registry}:${BUILD_NUMBER}"
                 }
             }
