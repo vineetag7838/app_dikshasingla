@@ -46,19 +46,17 @@ pipeline{
             steps{
                 parallel(
                     "PrecontainerCheck": {
-                        steps{
-                            script {
-                                container_exist = "${bat(script:'docker ps -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
-                                echo "check if c-${username}-master already exist with container id = ${env.container_exist}"
-                                if (env.container_exist != null) {
-                                    echo "deleting existing c-${username}-master container"
-                                    bat "docker stop c-${username}-master && docker rm c-${username}-master"
-                                }
+                        script {
+                            container_exist = "${bat(script:'docker ps -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
+                            echo "check if c-${username}-master already exist with container id = ${env.container_exist}"
+                            if (env.container_exist != null) {
+                                echo "deleting existing c-${username}-master container"
+                                bat "docker stop c-${username}-master && docker rm c-${username}-master"
                             }
                         }
                     },
                     "Push to Docker Hub": {
-                        steps{
+                        script{
                             echo "Push to Docker Hub"
                             bat "docker tag i_${user_name}_master ${registry}:${BUILD_NUMBER}"
                             withDockerRegistry([credentialsId:'DockerHub',url:""]){
