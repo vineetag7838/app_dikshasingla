@@ -66,7 +66,7 @@ pipeline{
 							echo "${cname}"
 						}
 						environment {
-							containerId = bat(script: "docker ps -a -q -f name=c-dikshasingla-master", returnStdout: true).trim()
+							containerId = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
 						}
 						when {
 							expression {
