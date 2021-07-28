@@ -66,12 +66,15 @@ pipeline{
 							environment {
 								containerId = bat(script: "docker ps -a -q -f name=${CNAME}", returnStdout: true).trim()
 							}
+							when {
+								expression {
+									return containerId != null
+								}
+							}
 							steps {
 								echo "check if ${CNAME} already exist"
-								if (containerId != null) {
-									echo "Stopping running container - ${CNAME}"
-									bat "docker stop ${CNAME} && docker rm ${CNAME}"
-								}
+								echo "Stopping running container - ${CNAME}"
+								bat "docker stop ${CNAME} && docker rm ${CNAME}"
 							}
 						}
                     },
