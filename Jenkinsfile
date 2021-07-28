@@ -65,9 +65,9 @@ pipeline{
                         script {
                             echo "check if c-${username}-master already exist"
                             CNAME=c-${username}-master
-                            if ("$(docker ps -qa -f name=$CNAME)") {
+                            if ("${docker ps -qa -f name=$CNAME}") {
                                 echo "Found container - $CNAME"
-                                if ("$(docker ps -q -f name=$CNAME)") {
+                                if ("${docker ps -q -f name=$CNAME}") {
                                     echo "Stopping running container - $CNAME"
                                     docker stop $CNAME;
                                 }
