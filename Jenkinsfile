@@ -64,14 +64,9 @@ pipeline{
                         environment {
                             containerId = bat(script: "docker ps -a -q -f name=c-${username}-master", returnStdout: true).trim().readLines().drop(1).join("")
                         }
-                        script {
+                        steps {
                             echo "check if c-${username}-master already exist"
-                            when {
-                                expression {
-                                    return containerId != null
-                                }
-                            }
-                            steps {
+							if (containerId != null) {
                                 echo "Stopping running container - ${CNAME}"
                                 bat "docker stop c-${username}-master && docker rm c-${username}-master"
                             }
