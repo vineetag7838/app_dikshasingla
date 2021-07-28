@@ -6,7 +6,7 @@ pipeline{
         docker_port = null
         username = 'dikshasingla'
 		branch = null
-		cname = 'c-dikshasingla-master'
+		cname = 'c-{username}-master'
         container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
@@ -62,8 +62,11 @@ pipeline{
             steps{
                 parallel(
                     "PrecontainerCheck": {
+						script{
+							echo "${cname}"
+						}
 						environment {
-							containerId = bat(script: "docker ps -a -q -f name=env.cname", returnStdout: true).trim()
+							containerId = bat(script: "docker ps -a -q -f name=c-dikshasingla-master", returnStdout: true).trim()
 						}
 						when {
 							expression {
