@@ -29,7 +29,21 @@ pipeline{
                 bat "mvn clean compile"
             }
         }
-        stage('Unit Testing'){
+        stage('Sonar Analysis') {
+            when {
+                branch 'develop'
+            }
+            steps{
+                echo "Start sonarqube analysis step"
+                withSonarQubeEnv(installationName: 'Test_Sonar') {
+                    bat "mvn clean install sonar:sonar -Dsonar.projectKey=sonar-dikshasingla -Dsonar.name=sonar-dikshasingla -Dsonar.login=5a4ef9631762fcc4e0a40db2afa95885752afdfb"
+                }
+            }
+        }
+        stage('Unit Testing') {
+            when {
+                branch 'master'
+            }
             steps{
                 echo "Unit Testing Step"
                 bat "mvn test"
@@ -70,11 +84,6 @@ pipeline{
             steps{
                 echo "Docker Deployment"
                 bat "docker run --name c-${username}-master -d -p 7200:3515 ${registry}:${BUILD_NUMBER}"
-            }
-        }
-        stage('End'){
-            steps{
-                echo "Build End"
             }
         }
     }
