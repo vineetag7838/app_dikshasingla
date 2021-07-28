@@ -74,7 +74,7 @@ pipeline{
                             }
                             step {
                                 echo "Stopping running container - ${CNAME}"
-                                docker stop ${CNAME} && docker rm ${CNAME}
+                                bat "docker stop ${CNAME} && docker rm ${CNAME}"
                             }
                         }
                     },
