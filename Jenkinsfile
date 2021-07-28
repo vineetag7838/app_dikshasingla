@@ -64,7 +64,7 @@ pipeline{
                     "PrecontainerCheck": {
 						steps{
 							environment {
-								containerId = bat(script: "docker ps -a -q -f name=${CNAME}", returnStdout: true).trim().readLines().drop(1).join("")
+								containerId = bat(script: "docker ps -a -q -f name=${CNAME}", returnStdout: true).trim()
 							}
 							steps {
 								echo "check if ${CNAME} already exist"
