@@ -71,7 +71,7 @@ pipeline{
                                     return containerId != null
                                 }
                             }
-                            step {
+                            steps {
                                 echo "Stopping running container - ${CNAME}"
                                 bat "docker stop c-${username}-master && docker rm c-${username}-master"
                             }
