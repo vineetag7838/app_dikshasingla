@@ -5,8 +5,6 @@ pipeline{
         properties = null
         docker_port = null
         username = 'dikshasingla'
-		branch = null
-		cname = 'c-{username}-master'
         container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
@@ -62,22 +60,13 @@ pipeline{
             steps{
                 parallel(
                     "PrecontainerCheck": {
-						script{
-							echo "${cname}"
-						}
-						environment {
-							containerId = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
-						}
-						when {
-							expression {
-								return containerId != null
-							}
-						}
-						steps {
-							echo "check if env.cname already exist"
-							echo "Stopping running container - env.cname"
-							bat "docker stop env.cname && docker rm env.cname"
-						}
+                        script {
+                            echo "check if c-${username}-master already exist with container id = ${env.container_exist}"
+                            if (env.container_exist != null) {
+                                echo "deleting existing c-${username}-master container"
+                                bat "docker stop c-${username}-master && docker rm c-${username}-master"
+                            }
+                        }
                     },
                     "Push to Docker Hub": {
                         script{
