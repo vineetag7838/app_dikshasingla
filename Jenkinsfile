@@ -5,7 +5,8 @@ pipeline{
         properties = null
         docker_port = null
         username = 'dikshasingla'
-        container_exist = "${bat(script:'docker ps -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
+		branch = null
+        container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
         timestamps()
