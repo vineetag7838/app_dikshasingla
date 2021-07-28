@@ -63,7 +63,7 @@ pipeline{
                 parallel(
                     "PrecontainerCheck": {
 						environment {
-							containerId = bat(script: "docker ps -a -q -f name=${cname}", returnStdout: true).trim()
+							containerId = bat(script: "docker ps -a -q -f name=env.cname", returnStdout: true).trim()
 						}
 						when {
 							expression {
@@ -71,9 +71,9 @@ pipeline{
 							}
 						}
 						steps {
-							echo "check if ${cname} already exist"
-							echo "Stopping running container - ${cname}"
-							bat "docker stop ${cname} && docker rm ${cname}"
+							echo "check if env.cname already exist"
+							echo "Stopping running container - env.cname"
+							bat "docker stop env.cname && docker rm env.cname"
 						}
                     },
                     "Push to Docker Hub": {
