@@ -21,7 +21,7 @@ spec:
                     - name: http
                       containerPort: 3515
                       protocol: TCP
-----
+---
 apiVersion: v1
 kind: Service
 metadata: 
