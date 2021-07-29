@@ -15,7 +15,7 @@ spec:
                 app: java-app
         spec:
             containers:
-                - name:java-app
+                - name: java-app
                   image: dikshasingla/inventory:latest
                   ports:
                     - name: http
