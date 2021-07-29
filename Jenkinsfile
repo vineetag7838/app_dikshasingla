@@ -5,10 +5,10 @@ pipeline{
         properties = null
         docker_port = null
         username = 'dikshasingla'
-		project_id = 'testjenkinsapi-321216'
-		cluster_name = java-api
-		location = 'us-central1-c'
-		credentials_id = 'TestJenkinsApi'
+        project_id = 'testjenkinsapi-321216'
+        cluster_name = 'java-api'
+        location = 'us-central1-c'
+        credentials_id = 'TestJenkinsApi'
         container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
