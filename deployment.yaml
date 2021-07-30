@@ -33,5 +33,5 @@ spec:
     ports:
         - protocol: TCP
           nodePort: 30158
-          port: 3515
+          port: 80
           targetPort: 3515
