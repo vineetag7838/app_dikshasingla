@@ -62,7 +62,7 @@ pipeline{
             steps{
                 parallel(
                     "PrecontainerCheck": {
-						steps{
+						script{
 							bat "echo "${cname}""
 						}
 						environment {
