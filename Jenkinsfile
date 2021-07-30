@@ -63,7 +63,7 @@ pipeline{
                 parallel(
                     "PrecontainerCheck": {
 						steps{
-							bat "echo "${cname}""
+							echo "${cname}"
 						}
 						environment {
 							containerId = "${bat(script:'docker ps -a -q -f name=env.cname', returnStdout: true).trim().readLines().drop(1).join("")}"
