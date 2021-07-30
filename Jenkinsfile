@@ -5,10 +5,8 @@ pipeline{
         properties = null
         docker_port = null
         username = 'dikshasingla'
-        project_id = 'testjenkinsapi-321216'
-        cluster_name = 'java-api'
-        location = 'us-central1-c'
-        credentials_id = 'TestJenkinsApi'
+		branch = null
+		cname = 'c-${username}-master'
         container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
@@ -64,22 +62,29 @@ pipeline{
             steps{
                 parallel(
                     "PrecontainerCheck": {
-                        script {
-                            echo "check if c-${username}-master already exist with container id = ${env.container_exist}"
-                            if (env.container_exist != null) {
-                                echo "deleting existing c-${username}-master container"
-                                bat "docker stop c-${username}-master && docker rm c-${username}-master"
-                            }
-                        }
+						script{
+							bat "echo "${cname}""
+						}
+						environment {
+							containerId = bat(script:'docker ps -a -q -f name=env.cname', returnStdout: true).trim().readLines().drop(1).join("")
+						}
+						when {
+							expression {
+								return containerId != null
+							}
+						}
+						steps {
+							echo "check if env.cname already exist"
+							echo "Stopping running container - env.cname"
+							bat "docker stop env.cname && docker rm env.cname"
+						}
                     },
                     "Push to Docker Hub": {
                         script{
                             echo "Push to Docker Hub"
                             bat "docker tag i-${username}-master ${registry}:${BUILD_NUMBER}"
-							bat "docker tag i-${username}-master ${registry}:latest"
                             withDockerRegistry([credentialsId:'DockerHub',url:""]){
                                 bat "docker push ${registry}:${BUILD_NUMBER}"
-								bat "docker push ${registry}:latest"
                             }
                         }
                     }
@@ -90,12 +95,6 @@ pipeline{
             steps{
                 echo "Docker Deployment"
                 bat "docker run --name c-${username}-master -d -p 7200:3515 ${registry}:${BUILD_NUMBER}"
-            }
-        }
-        stage('Kubernetes Deployment'){
-            steps{
-                echo "Kubernetes Deployment"
-                step([$class:'KubernetesEngineBuilder',projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'deployment.yaml',credentialsId:env.credentials_id,verifyDeployments:true])
             }
         }
     }
