@@ -9,6 +9,7 @@ pipeline{
         cluster_name = 'java-api'
         location = 'us-central1-c'
         credentials_id = 'TestJenkinsApi'
+        namespace = 'kubernetes-cluster-dikshasingla'
         container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
@@ -103,7 +104,8 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                step([$class:'KubernetesEngineBuilder',projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'deployment.yaml',credentialsId:env.credentials_id,verifyDeployments:false])
+                step([$class:'KubernetesEngineBuilder',namespace:env.namespace,projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'service.yaml',credentialsId:env.credentials_id,verifyDeployments:false])
+                step([$class:'KubernetesEngineBuilder',namespace:env.namespace,projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'deployment.yaml',credentialsId:env.credentials_id,verifyDeployments:true])
             }
         }
     }
