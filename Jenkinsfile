@@ -23,7 +23,7 @@ pipeline{
     stages{
         stage('Checkout'){
             steps{
-                echo "Checkout from git repository for branch - ${BRANCH_NAME} - ${branch}"
+                echo "Checkout from git repository for branch - ${BRANCH_NAME}"
                 git 'https://github.com/dikshasingla2015/inventory-system.git'
                 script{
                     if (BRANCH_NAME == 'master') {
