@@ -65,7 +65,7 @@ pipeline{
             steps{
                 echo "Docker Image Step"
                 bat "mvn install"
-                bat "docker build -t i-${username}-master --no-cache -f Dockerfile ."
+                bat "docker build -t i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} --no-cache -f Dockerfile ."
             }
         }
         stage('Containers') {
@@ -83,10 +83,8 @@ pipeline{
                     "Push to Docker Hub": {
                         script{
                             echo "Push to Docker Hub"
-                            bat "docker tag i-${username}-master ${registry}:${BUILD_NUMBER}"
-							bat "docker tag i-${username}-master ${registry}:latest"
+							bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:latest"
                             withDockerRegistry([credentialsId:'DockerHub',url:""]){
-                                bat "docker push ${registry}:${BUILD_NUMBER}"
 								bat "docker push ${registry}:latest"
                             }
                         }
@@ -103,7 +101,7 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                step([$class:'KubernetesEngineBuilder',projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'deployment.yaml',credentialsId:env.credentials_id,verifyDeployments:true])
+                step([$class:'KubernetesEngineBuilder',projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'deployment.yaml',credentialsId:env.credentials_id,verifyDeployments:false])
             }
         }
     }
