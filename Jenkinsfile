@@ -25,10 +25,12 @@ pipeline{
             steps{
                 echo "Checkout from git repository for branch - ${BRANCH_NAME}"
                 git 'https://github.com/dikshasingla2015/inventory-system.git'
-                if (BRANCH_NAME == 'master') {
-                    docker_port = 7200
-                } else {
-                    docker_port = 7300
+                script{
+                    if (BRANCH_NAME == 'master') {
+                        docker_port = 7200
+                    } else {
+                        docker_port = 7300
+                    }
                 }
             }
         }
