@@ -21,9 +21,15 @@ pipeline{
         ))
     }
     stages{
-        stage('Start'){
+        stage('Checkout'){
             steps{
+                echo "Checkout from git repository for branch - ${BRANCH_NAME}"
                 git 'https://github.com/dikshasingla2015/inventory-system.git'
+                if (BRANCH_NAME == 'master') {
+                    docker_port = 7200
+                } else {
+                    docker_port = 7300
+                }
             }
         }
         stage('Build'){
@@ -89,7 +95,7 @@ pipeline{
         stage('Docker Deployment'){
             steps{
                 echo "Docker Deployment"
-                bat "docker run --name c-${username}-master -d -p 7200:3515 ${registry}:${BUILD_NUMBER}"
+                bat "docker run --name c-${username}-master -d -p ${docker_port}:3515 ${registry}:${BUILD_NUMBER}"
             }
         }
         stage('Kubernetes Deployment'){
