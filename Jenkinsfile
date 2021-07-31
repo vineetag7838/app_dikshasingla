@@ -83,8 +83,10 @@ pipeline{
                     "Push to Docker Hub": {
                         script{
                             echo "Push to Docker Hub"
+                            bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:${BUILD_NUMBER}"
 							bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:latest"
                             withDockerRegistry([credentialsId:'DockerHub',url:""]){
+                                bat "docker push ${registry}:${BUILD_NUMBER}"
 								bat "docker push ${registry}:latest"
                             }
                         }
