@@ -1,7 +1,7 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-    namespace: kubernetes-cluster-dikshasingla
+    name: kubernetes-cluster-dikshasingla
     labels:
         name: kubernetes-cluster-dikshasingla
 
