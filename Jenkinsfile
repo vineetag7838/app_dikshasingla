@@ -10,7 +10,8 @@ pipeline{
         location = 'us-central1-c'
         credentials_id = 'TestJenkinsApi'
         namespace = 'kubernetes-cluster-dikshasingla'
-        container_exist = "${bat(script:'docker ps -a -q -f name=c-dikshasingla-master', returnStdout: true).trim().readLines().drop(1).join("")}"
+        container_name = 'c-${username}-${BRANCH_NAME}'
+        container_exist = "${bat(script:'docker ps -a -q -f name=env.container_name', returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
         timestamps()
@@ -74,10 +75,10 @@ pipeline{
                 parallel(
                     "PrecontainerCheck": {
                         script {
-                            echo "check if c-${username}-master already exist with container id = ${env.container_exist}"
+                            echo "check if ${env.container_name} already exist with container id = ${env.container_exist}"
                             if (env.container_exist != null) {
-                                echo "deleting existing c-${username}-master container"
-                                bat "docker stop c-${username}-master && docker rm c-${username}-master"
+                                echo "deleting existing ${env.container_name} container"
+                                bat "docker stop ${env.container_name} && docker rm ${env.container_name}"
                             }
                         }
                     },
@@ -98,7 +99,7 @@ pipeline{
         stage('Docker Deployment'){
             steps{
                 echo "Docker Deployment"
-                bat "docker run --name c-${username}-master -d -p ${docker_port}:3515 ${registry}:${BUILD_NUMBER}"
+                bat "docker run --name ${env.container_name} -d -p ${docker_port}:3515 ${registry}:${BUILD_NUMBER}"
             }
         }
         stage('Kubernetes Deployment'){
