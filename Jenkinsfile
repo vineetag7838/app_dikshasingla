@@ -10,8 +10,8 @@ pipeline{
         location = 'us-central1-c'
         credentials_id = 'TestJenkinsApi'
         namespace = 'kubernetes-cluster-dikshasingla'
-        container_name = 'c-${username}-${BRANCH_NAME}'
-        container_exist = "${bat(script:'docker ps -a -q -f name=env.container_name', returnStdout: true).trim().readLines().drop(1).join("")}"
+        container_name = "c-${username}-${BRANCH_NAME}"
+        container_exist = "${bat(script:"docker ps -a -q -f name=${env.container_name}", returnStdout: true).trim().readLines().drop(1).join("")}"
     }
     options{
         timestamps()
