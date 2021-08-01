@@ -38,7 +38,7 @@ pipeline{
         }
         stage('Build'){
             steps{
-                echo "Running build ${JOB_NAME} # ${BUILD_NUMBER} for ${properties['user.employeeid']} with docker as ${docker_port}"
+                echo "Running build ${JOB_NAME} # ${BUILD_NUMBER} for ${properties['user.employeeid']} with docker port as ${docker_port}"
                 echo "Build Step"
                 bat "mvn clean compile"
             }
