@@ -2,7 +2,6 @@ pipeline{
     agent any
     environment{
         registry = 'dikshasingla/inventory'
-        properties = null
         docker_port = null
         username = 'dikshasingla'
         project_id = 'testjenkinsapi-321216'
@@ -38,7 +37,7 @@ pipeline{
         }
         stage('Build'){
             steps{
-                echo "Running build ${JOB_NAME} # ${BUILD_NUMBER} for ${properties['user.employeeid']} with docker port as ${docker_port}"
+                echo "Running build ${JOB_NAME} # ${BUILD_NUMBER} with docker port as ${docker_port}"
                 echo "Build Step"
                 bat "mvn clean compile"
             }
