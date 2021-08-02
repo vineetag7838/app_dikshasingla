@@ -11,6 +11,6 @@ spec:
         app: inventory-app
     ports:
         - protocol: TCP
-          nodePort: 30157
+          nodePort: 30158
           port: 80
           targetPort: 3515
