@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    tools {
+        maven 'Maven3' 
+    }
     environment{
         registry = 'dikshasingla/inventory'
         docker_port = null
@@ -25,7 +28,7 @@ pipeline{
         stage('Checkout'){
             steps{
                 echo "Checkout from git repository for branch - ${BRANCH_NAME}"
-                git 'https://github.com/dikshasingla2015/inventory-system.git'
+                checkout scm
                 script{
                     if (BRANCH_NAME == 'master') {
                         docker_port = 7200
