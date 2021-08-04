@@ -102,10 +102,8 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                withCredentials([file(credentialsId: 'TestJenkinsApi', variable: 'TOKEN')]) {
-                    bat 'kubectl apply -f deployment.yaml --token $TOKEN'
-                    bat 'kubectl apply -f service.yaml --token $TOKEN'
-                }
+                bat 'kubectl apply -f deployment.yaml --token $TOKEN'
+                bat 'kubectl apply -f service.yaml --token $TOKEN'
             }
         }
     }
