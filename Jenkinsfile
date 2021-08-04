@@ -107,8 +107,10 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                bat "kubectl apply -f service.yaml"
-                bat "kubectl apply -f deployment.yaml"
+                withKubeConfig([credentialsId: 'TestJenkinsApi']) {
+                    bat "kubectl apply -f service.yaml"
+                    bat "kubectl apply -f deployment.yaml"
+                }
             }
         }
     }
