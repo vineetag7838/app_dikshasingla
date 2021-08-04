@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    tools {
+        maven 'Maven3' 
+    }
     environment{
         registry = 'dikshasingla/inventory'
         docker_port = null
@@ -39,9 +42,7 @@ pipeline{
             steps{
                 echo "Running build ${JOB_NAME} # ${BUILD_NUMBER} with docker port as ${docker_port}"
                 echo "Build Step"
-                withMaven(maven : 'Maven3') {
-                    bat "mvn clean compile"
-                }
+                bat "mvn clean compile"
             }
         }
         stage('Sonar Analysis') {
@@ -61,17 +62,13 @@ pipeline{
             }
             steps{
                 echo "Unit Testing Step"
-                withMaven(maven : 'Maven3') {
-                    bat "mvn test"
-                } 
+                bat "mvn test"
             }
         }
         stage('Docker Image'){
             steps{
                 echo "Docker Image Step"
-                withMaven(maven : 'Maven3') {
-                    bat "mvn install"
-                }
+                bat "mvn install"
                 bat "docker build -t i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} --no-cache -f Dockerfile ."
             }
         }
