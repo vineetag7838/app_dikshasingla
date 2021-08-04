@@ -20,6 +20,19 @@ pipeline{
         ))
     }
     stages{
+        stage('Checkout'){
+            steps{
+                echo "Checkout from git repository for branch - ${BRANCH_NAME}"
+                checkout scm
+                script{
+                    if (BRANCH_NAME == 'master') {
+                        docker_port = 7200
+                    } else {
+                        docker_port = 7300
+                    }
+                }
+            }
+        }
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
