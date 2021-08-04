@@ -17,7 +17,7 @@ spec:
         spec:
             containers:
                 - name: inventory-app
-                  image: dikshasingla/inventory:latest-develop
+                  image: dikshasingla/inventory:latest-master
                   ports:
                     - name: http
                       containerPort: 3515
