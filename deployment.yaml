@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: inventory-app-deployment
+    name: inventory-app-deployment-develop
     namespace: kubernetes-cluster-dikshasingla
     labels:
-        app: inventory-app
+        app: inventory-app-develop
 spec:
     replicas: 4
     selector:
         matchLabels:
-            app: inventory-app
+            app: inventory-app-develop
     template:
         metadata:
             labels:
-                app: inventory-app
+                app: inventory-app-develop
         spec:
             containers:
-                - name: inventory-app
+                - name: inventory-app-develop
                   image: dikshasingla/inventory:latest
                   ports:
                     - name: http
