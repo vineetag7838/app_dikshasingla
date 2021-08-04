@@ -102,8 +102,8 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                bat 'kubectl apply -f deployment.yaml --token $TOKEN'
-                bat 'kubectl apply -f service.yaml --token $TOKEN'
+                bat 'kubectl apply -f deployment.yaml'
+                bat 'kubectl apply -f service.yaml'
             }
         }
     }
