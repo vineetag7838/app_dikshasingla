@@ -107,8 +107,8 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                step([$class:'KubernetesEngineBuilder',namespace:env.namespace,projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'service.yaml',credentialsId:env.credentials_id,verifyDeployments:false])
-                step([$class:'KubernetesEngineBuilder',namespace:env.namespace,projectId:env.project_id,clusterName:env.cluster_name,location:env.location,manifestPattern:'deployment.yaml',credentialsId:env.credentials_id,verifyDeployments:true])
+                bat "kubectl apply -f service.yaml"
+                bat "kubectl apply -f deployment.yaml"
             }
         }
     }
