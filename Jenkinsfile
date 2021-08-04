@@ -7,11 +7,6 @@ pipeline{
         registry = 'dikshasingla/inventory'
         docker_port = null
         username = 'dikshasingla'
-        project_id = 'testjenkinsapi-321216'
-        cluster_name = 'java-api'
-        location = 'us-central1-c'
-        credentials_id = 'TestJenkinsApi'
-        namespace = 'kubernetes-cluster-dikshasingla'
         container_name = "c-${username}-${BRANCH_NAME}"
         container_exist = "${bat(script:"docker ps -a -q -f name=${env.container_name}", returnStdout: true).trim().readLines().drop(1).join("")}"
     }
@@ -107,10 +102,8 @@ pipeline{
         stage('Kubernetes Deployment'){
             steps{
                 echo "Kubernetes Deployment"
-                withKubeConfig([credentialsId: 'TestJenkinsApi']) {
-                    bat "kubectl apply -f service.yaml"
-                    bat "kubectl apply -f deployment.yaml"
-                }
+                bat "kubectl apply -f service.yaml"
+                bat "kubectl apply -f deployment.yaml"
             }
         }
     }
