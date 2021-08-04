@@ -103,8 +103,8 @@ pipeline{
             steps{
                 echo "Kubernetes Deployment"
                 script{
-                    bat 'kubectl apply -f service.yaml'
                     bat 'kubectl apply -f deployment.yaml'
+                    bat 'kubectl apply -f service.yaml'
                 }
             }
         }
