@@ -87,11 +87,11 @@ pipeline{
                     "Push to Docker Hub": {
                         script{
                             echo "Push to Docker Hub"
-                            bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:${BUILD_NUMBER}"
-							bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:latest"
+                            bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:${BRANCH_NAME}-${BUILD_NUMBER}"
+							bat "docker tag i-${username}-${BRANCH_NAME}:${BUILD_NUMBER} ${registry}:latest-${BRANCH_NAME}"
                             withDockerRegistry([credentialsId:'DockerHub',url:""]){
-                                bat "docker push ${registry}:${BUILD_NUMBER}"
-								bat "docker push ${registry}:latest"
+                                bat "docker push ${registry}:${BRANCH_NAME}-${BUILD_NUMBER}"
+								bat "docker push ${registry}:latest-${BRANCH_NAME}"
                             }
                         }
                     }
@@ -101,7 +101,7 @@ pipeline{
         stage('Docker Deployment'){
             steps{
                 echo "Docker Deployment"
-                bat "docker run --name ${env.container_name} -d -p ${docker_port}:3515 ${registry}:${BUILD_NUMBER}"
+                bat "docker run --name ${env.container_name} -d -p ${docker_port}:3515 ${registry}:${BRANCH_NAME}-${BUILD_NUMBER}"
             }
         }
         stage('Kubernetes Deployment'){
