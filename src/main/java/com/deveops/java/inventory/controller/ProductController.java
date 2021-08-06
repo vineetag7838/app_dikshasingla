@@ -21,7 +21,7 @@ public class ProductController {
 	
 	@GetMapping("")
 	private String getData() {
-		return "Hello from master branch.";
+		return "Hello from develop branch.";
 	}
 
 	@PostMapping("inventory/add")
