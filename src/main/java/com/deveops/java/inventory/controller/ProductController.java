@@ -13,23 +13,28 @@ import com.deveops.java.inventory.model.Product;
 import com.deveops.java.inventory.service.ProductService;
 
 @RestController
-@RequestMapping(value = "/inventory/")
+@RequestMapping(value = "/")
 public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@GetMapping("")
+	private String getData() {
+		return "Hello from master branch.";
+	}
 
-	@PostMapping("add")
+	@PostMapping("inventory/add")
 	public InventoryBEObjectBaseResponse addProduct(@RequestBody Product product) {
 		return productService.addProduct(product);
 	}
 
-	@GetMapping("getAllProducts")
+	@GetMapping("inventory/getAllProducts")
 	public InventoryBEObjectBaseResponse getAllProducts() {
 		return productService.getAllProducts();
 	}
 
-	@GetMapping("getProductById")
+	@GetMapping("inventory/getProductById")
 	private InventoryBEObjectBaseResponse getProductById(@RequestParam(value = "productId") String productId) {
 		return productService.getProductById(productId);
 	}
