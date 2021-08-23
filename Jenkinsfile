@@ -41,16 +41,12 @@ pipeline{
             }
         }
 	    
-        stage('Sonar Analysis') {
-        environment 
+        stage ('Sonar Analysis')
+	 {
+		environment 
 		{
 		   scannerHome = tool name: 'SonarQubeScanner'
-		}   
-	when {
-                branch 'develop'
-            }
-            
-               
+		}
 		steps
 		{
 		   withSonarQubeEnv("Test_Sonar")
@@ -58,8 +54,8 @@ pipeline{
 			  bat "mvn sonar:sonar -Dhttps.protocols=TLSv1.2"
 		   }
 		}
-            }
-        }
+
+	 }
         stage('Unit Testing') {
             when {
                 branch 'master'
