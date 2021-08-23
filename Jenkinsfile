@@ -41,14 +41,18 @@ pipeline{
             }
         }
         stage('Sonar Analysis') {
-            when {
+            environment 
+		{
+		   scannerHome = tool name: 'SonarQubeScanner'
+		}
+	    when {
                 branch 'develop'
             }
             steps{
-                echo "Start sonarqube analysis step"
-                withSonarQubeEnv(installationName: 'Test_Sonar') {
-                    bat "mvn clean install sonar:sonar -Dsonar.projectKey=sonar-dikshasingla -Dsonar.name=sonar-dikshasingla -Dsonar.login=5a4ef9631762fcc4e0a40db2afa95885752afdfb"
-                }
+                withSonarQubeEnv("Test_Sonar")
+		   {
+			  bat "mvn sonar:sonar -Dhttps.protocols=TLSv1.2"
+		   }
             }
         }
         stage('Unit Testing') {
